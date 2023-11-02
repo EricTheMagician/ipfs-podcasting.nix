@@ -11,7 +11,7 @@
   node_cfg = config.services.kubo;
   ipfs_podcasting_package = pkgs.stdenv.mkDerivation {
     name = "ipfspodcastnode";
-    src = inputs.ipfs-podcasting;
+    src = inputs.source;
     buildPhase = ''
       mkdir $out;
       cp ipfspodcastnode.py $out;

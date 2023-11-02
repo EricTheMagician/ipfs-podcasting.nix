@@ -6,16 +6,16 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-23.05";
 
     # ipfs podcasting
-    ipfs-podcasting.url = "github:Cameron-IPFSPodcasting/podcastnode-Python";
-    ipfs-podcasting.flake = false;
+    source.url = "github:Cameron-IPFSPodcasting/podcastnode-Python";
+    source.flake = false;
   };
 
   outputs = {
     self,
     nixpkgs,
-    ipfs-podcasting,
+    source,
     ...
-  } @ inputs: let
+  }: let
     inherit (self) outputs;
     # Supported systems for your flake packages, shell, etc.
     systems = [
