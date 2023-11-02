@@ -4,19 +4,13 @@
   inputs = {
     # Nixpkgs
     nixpkgs.url = "github:nixos/nixpkgs/nixos-23.05";
-
-    # ipfs podcasting
-    source.url = "github:Cameron-IPFSPodcasting/podcastnode-Python";
-    source.flake = false;
   };
 
   outputs = {
     self,
     nixpkgs,
-    source,
     ...
   }: let
-    inherit (self) outputs;
     # Supported systems for your flake packages, shell, etc.
     systems = [
       "aarch64-linux"

@@ -1,5 +1,4 @@
 {
-  inputs,
   pkgs,
   lib,
   config,
@@ -8,10 +7,15 @@
   ipfs_podcasting_email = config.programs.ipfs-podcasting.email;
   ipfs_python = pkgs.python3.withPackages (ps: with ps; [requests]);
   cfg = config.services.kubo;
-  node_cfg = config.services.kubo;
+  program_cfg = config.programs.ipfs-podcasting;
   ipfs_podcasting_package = pkgs.stdenv.mkDerivation {
     name = "ipfspodcastnode";
-    src = inputs.source;
+    src = pkgs.fetchFromGitHub {
+      owner = "Cameron-IPFSPodcasting";
+      repo = "podcastnode-Python";
+      rev = "0f8f70771f5ff939af5fa644172db10f94988399";
+      hash = "sha256-lfH+aJAgGsIsPFTacVLQ44JBfRDtjs3uKfDbYmPSUiI=";
+    };
     buildPhase = ''
       mkdir $out;
       cp ipfspodcastnode.py $out;
@@ -37,7 +41,7 @@ in {
     };
   };
 
-  config = mkIf node_cfg.enable {
+  config = mkIf program_cfg.enable {
     services.kubo = {
       # kubo is the main ipfs implementation in Go
       enable = true;
@@ -83,7 +87,7 @@ in {
     };
 
     # for ipfs connections
-    networking.firewall = optionalAttrs node_cfg.openFirewall {
+    networking.firewall = optionalAttrs program_cfg.openFirewall {
       allowedTCPPorts = [4001];
       allowedUDPPorts = [4001];
     };

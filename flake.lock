@@ -18,24 +18,7 @@
     },
     "root": {
       "inputs": {
-        "nixpkgs": "nixpkgs",
-        "source": "source"
-      }
-    },
-    "source": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1698846948,
-        "narHash": "sha256-lfH+aJAgGsIsPFTacVLQ44JBfRDtjs3uKfDbYmPSUiI=",
-        "owner": "Cameron-IPFSPodcasting",
-        "repo": "podcastnode-Python",
-        "rev": "0f8f70771f5ff939af5fa644172db10f94988399",
-        "type": "github"
-      },
-      "original": {
-        "owner": "Cameron-IPFSPodcasting",
-        "repo": "podcastnode-Python",
-        "type": "github"
+        "nixpkgs": "nixpkgs"
       }
     }
   },
