@@ -21,6 +21,9 @@
       cp ipfspodcastnode.py $out;
       # patch the ipfspodcastnode.py script to point to the ipfs binary
       sed -i 's@^ipfspath = \(.\+\)$@ipfspath = "${cfg.package}/bin/ipfs"@g' "$out/ipfspodcastnode.py"
+      # replace the python identifier with the nix identifier
+      # see https://github.com/Cameron-IPFSPodcasting/podcastnode-Python/issues/12
+      sed -i -E  s/\'version\':\ \'\(\[0-9\]+\.\[0-9\]\)p/\'version\':\ \'\\1z/ "$out/ipfspodcastnode.py"
     '';
   };
   inherit (lib) mkDefault mkEnableOption mkOption mkIf optionalAttrs types;
