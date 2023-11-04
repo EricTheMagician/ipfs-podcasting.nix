@@ -7,6 +7,10 @@ Add ipfs-podcasting.nix to your `flake.nix`:
 ```nix
 {
   inputs.ipfs-podcasting.url = "https://flakehub.com/f/EricTheMagician/ipfs-podcasting.nix/*.tar.gz";
+  inputs.ipfs-podcasting-python = {
+    url = "github:Cameron-IPFSPodcasting/podcastnode-Python";
+    flake = false;
+  };
 
   outputs = { self, ipfs-podcasting }: {
     mini-nix = nixpkgs.lib.nixosSystem.ipfs-node {

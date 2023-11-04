@@ -4,6 +4,8 @@
   inputs = {
     # Nixpkgs
     nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/*.tar.gz";
+    ipfs-podcasting-python.url = "github:Cameron-IPFSPodcasting/podcastnode-Python";
+    ipfs-podcasting-python.flake = false;
   };
 
   outputs = {

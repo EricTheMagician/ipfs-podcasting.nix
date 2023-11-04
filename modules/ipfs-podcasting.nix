@@ -2,6 +2,7 @@
   pkgs,
   lib,
   config,
+  inputs,
   ...
 }: let
   ipfs_podcasting_email = config.programs.ipfs-podcasting.email;
@@ -10,12 +11,7 @@
   program_cfg = config.programs.ipfs-podcasting;
   ipfs_podcasting_package = pkgs.stdenv.mkDerivation {
     name = "ipfspodcastnode";
-    src = pkgs.fetchFromGitHub {
-      owner = "Cameron-IPFSPodcasting";
-      repo = "podcastnode-Python";
-      rev = "0f8f70771f5ff939af5fa644172db10f94988399";
-      hash = "sha256-lfH+aJAgGsIsPFTacVLQ44JBfRDtjs3uKfDbYmPSUiI=";
-    };
+    src = inputs.ipfs-podcasting-python;
     buildPhase = ''
       mkdir $out;
       cp ipfspodcastnode.py $out;
