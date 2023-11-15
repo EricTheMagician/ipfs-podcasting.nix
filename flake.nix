@@ -4,8 +4,6 @@
   inputs = {
     # Nixpkgs
     nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/*.tar.gz";
-    ipfs-podcasting-python.url = "github:Cameron-IPFSPodcasting/podcastnode-Python";
-    ipfs-podcasting-python.flake = false;
   };
 
   outputs = {
@@ -27,7 +25,12 @@
   in {
     # Formatter for your nix files, available through 'nix fmt'
     formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.alejandra);
-
+    packages = forAllSystems (system: let
+      pkgs = import nixpkgs {inherit system;};
+    in {
+      ipfs-podcasting = pkgs.callPackage ./packages/ipfs-podcasting {};
+      default = self.packages.${system}.ipfs-podcasting;
+    });
     nixosModules = {
       ipfs-podcasting = import ./modules/ipfs-podcasting.nix;
       default = self.nixosModules.ipfs-podcasting;

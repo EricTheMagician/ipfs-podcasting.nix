@@ -2,26 +2,14 @@
   pkgs,
   lib,
   config,
-  inputs,
   ...
 }: let
   ipfs_podcasting_email = config.programs.ipfs-podcasting.email;
   ipfs_python = pkgs.python3.withPackages (ps: with ps; [requests]);
   cfg = config.services.kubo;
   program_cfg = config.programs.ipfs-podcasting;
-  ipfs_podcasting_package = pkgs.stdenv.mkDerivation {
-    name = "ipfspodcastnode";
-    src = inputs.ipfs-podcasting-python;
-    buildPhase = ''
-      mkdir $out;
-      cp ipfspodcastnode.py $out;
-      # patch the ipfspodcastnode.py script to point to the ipfs binary
-      sed -i 's@^ipfspath = \(.\+\)$@ipfspath = "${cfg.package}/bin/ipfs"@g' "$out/ipfspodcastnode.py"
-      # replace the python identifier with the nix identifier
-      # see https://github.com/Cameron-IPFSPodcasting/podcastnode-Python/issues/12
-      sed -i -E  s/\'version\':\ \'\(\[0-9\]+\.\[0-9\]\)p/\'version\':\ \'\\1z/ "$out/ipfspodcastnode.py"
-    '';
-  };
+  ipfs_podcasting_package = pkgs.callPackage ../packages/ipfs-podcasting {};
+  turbo-mode = lib.strings.optionalString config.programs.ipfs-podcasting.turbo-mode "--turbo-mode";
   inherit (lib) mkDefault mkEnableOption mkOption mkIf optionalAttrs types;
 in {
   options = {
@@ -31,6 +19,12 @@ in {
         type = types.str;
         description = "Enter your email for support & management via IPFSPodcasting.net/Manage";
         example = "email@example.com";
+      };
+      turbo-mode = mkOption {
+        type = types.bool;
+        default = false;
+        description = "If enabled, turbo mode will keep processing the queue until the queue is empty or a failure occurs.";
+        example = true;
       };
       openFirewall = mkOption {
         type = types.bool;
@@ -63,7 +57,7 @@ in {
       script = ''
         cd "/var/log/ipfs-podcasting";
         export IPFS_PATH=${cfg.dataDir};
-        ${ipfs_python}/bin/python "${ipfs_podcasting_package}/ipfspodcastnode.py" '${ipfs_podcasting_email}'
+        ${ipfs_python}/bin/python "${ipfs_podcasting_package}/ipfspodcastnode.py" '${ipfs_podcasting_email}' ${turbo-mode}
       '';
     };
 
